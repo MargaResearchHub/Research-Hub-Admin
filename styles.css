@@ -1,0 +1,1183 @@
+/* ============================================================
+   PAPER REGISTRY — ADMIN STYLESHEET
+   Tokens below are copied verbatim from the Marga Research Hub's
+   styles.css, so this tool shares the exact same palette/type.
+   ============================================================ */
+:root {
+  --maroon-950: #3F0D16;
+  --maroon-900: #57121E;
+  --maroon-800: #6E1A28;
+  --maroon-700: #84202F;
+  --maroon-600: #9A2A3B;
+  --gold: #D4A937;
+  --gold-light: #EAD08A;
+  --cream: #F9F1E4;
+  --paper-bg: #FBF7EF;
+  --ink: #2A1013;
+  --ink-soft: #6B5257;
+  --line: #E7DCC9;
+  --white: #FFFFFF;
+  --radius-s: 8px;
+  --radius-m: 14px;
+  --radius-l: 22px;
+  --shadow-card: 0 10px 30px -14px rgba(63, 13, 22, 0.28);
+  --shadow-pop: 0 24px 60px -20px rgba(30, 5, 10, 0.45);
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --error: #C0455B;
+  --error-bg: #F7E7EA;
+  --status-published: #3F7D4F;
+  --status-published-bg: #E9F2EA;
+  --status-report: #2F6C8A;
+  --status-report-bg: #E6F0F4;
+  --status-presentation: #5E3B84;
+  --status-presentation-bg: #EFE7F5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--paper-bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.access-blocked {
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+  gap: 8px;
+  padding: 24px;
+  text-align: center;
+  background: var(--paper-bg);
+}
+
+.access-blocked h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  color: var(--maroon-950);
+}
+
+.access-blocked p {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+img,
+svg {
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2.5px solid var(--maroon-700);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   BUTTONS — same shapes/colors as the public site
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+  background: transparent;
+  font-weight: 600;
+  font-size: 14px;
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease, color .15s ease, opacity .15s ease;
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-gold {
+  background: var(--gold);
+  color: var(--maroon-950);
+}
+
+.btn-gold:hover:not(:disabled) {
+  background: var(--gold-light);
+  box-shadow: 0 10px 24px -10px rgba(212, 169, 55, .55);
+}
+
+.btn-maroon {
+  background: var(--maroon-800);
+  color: var(--cream);
+}
+
+.btn-maroon:hover:not(:disabled) {
+  background: var(--maroon-900);
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  border-color: var(--maroon-700);
+  color: var(--maroon-800);
+}
+
+.btn-sm {
+  padding: 8px 15px;
+  font-size: 12.5px;
+}
+
+.btn-primary {
+  width: 100%;
+  margin-top: 22px;
+  background: var(--maroon-800);
+  color: var(--cream);
+  border: none;
+  padding: 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.btn-primary:hover {
+  background: var(--maroon-900);
+}
+
+.btn-primary.btn-danger {
+  background: var(--error);
+}
+
+.btn-primary.btn-danger:hover {
+  background: #A5384B;
+}
+
+/* ============================================================
+   FORM FIELDS — matches the public site's `.field` pattern
+   ============================================================ */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-full {
+  grid-column: 1 / -1;
+}
+
+.field-optional {
+  text-transform: none;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--ink-soft);
+}
+
+.field label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.field input[type="text"],
+.field input[type="password"],
+.field input[type="number"],
+.field select,
+.field textarea {
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-s);
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  width: 100%;
+  background: var(--white);
+  color: var(--ink);
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  border-color: var(--maroon-700);
+}
+
+.field input.has-error,
+.field textarea.has-error {
+  border-color: var(--error);
+}
+
+.field-hint {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  margin-top: 1px;
+}
+
+.modal-field-error {
+  font-size: 11.5px;
+  color: var(--error);
+  min-height: 14px;
+  display: block;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.checkbox-label input {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--maroon-800);
+}
+
+.field-checkbox-row {
+  gap: 4px;
+}
+
+/* ============================================================
+   LOGIN SCREEN
+   ============================================================ */
+.login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 18% 18%, #FDFAF3 0%, var(--paper-bg) 55%);
+}
+
+.login-screen[hidden] {
+  display: none;
+}
+
+/* the "registry seal" watermark — a quiet nod to the ledger-stamp
+   motif, restrained enough that it never competes with the form */
+.login-seal-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 620px;
+  height: 620px;
+  transform: translate(-50%, -50%) rotate(-8deg);
+  border-radius: 50%;
+  border: 3px solid var(--maroon-800);
+  opacity: .05;
+  pointer-events: none;
+}
+
+.login-seal-watermark::before {
+  content: "";
+  position: absolute;
+  inset: 22px;
+  border: 1.5px solid var(--maroon-800);
+  border-radius: 50%;
+}
+
+.login-card {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  background: var(--white);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-pop);
+  padding: 40px 34px;
+  text-align: center;
+}
+
+.login-eyebrow {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--gold);
+  background: var(--maroon-950);
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.login-title {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--maroon-950);
+  margin: 0 0 8px;
+}
+
+.login-sub {
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin: 0 0 26px;
+  line-height: 1.5;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+}
+
+.login-error {
+  margin: 0;
+  min-height: 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--error);
+}
+
+.login-submit {
+  width: 100%;
+  padding: 13px;
+  margin-top: 2px;
+}
+
+/* ============================================================
+   HEADER / DASHBOARD SHELL
+   ============================================================ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+}
+
+.header-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 14px 28px;
+}
+
+.admin-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: linear-gradient(155deg, var(--maroon-800), var(--maroon-950));
+  flex: none;
+  position: relative;
+}
+
+.logo-mark::after {
+  content: "M";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--gold);
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.logo-text span {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--maroon-950);
+}
+
+.logo-text small {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+}
+
+.admin-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.session-user {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+/* role stamp — small embossed "seal" badge, the signature motif */
+.role-stamp {
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: .09em;
+  padding: 5px 11px;
+  border-radius: 999px;
+  transform: rotate(-3deg);
+  display: inline-block;
+}
+
+.role-stamp-admin {
+  background: var(--maroon-800);
+  color: var(--cream);
+  border: 1.5px solid var(--gold);
+}
+
+.role-stamp-user {
+  background: var(--gold-light);
+  color: var(--maroon-950);
+  border: 1.5px solid var(--maroon-700);
+}
+
+.admin-main {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 28px 28px 80px;
+}
+
+/* ============================================================
+   TOOLBAR
+   ============================================================ */
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.admin-search {
+  flex: 1 1 220px;
+  min-width: 180px;
+}
+
+.admin-search input {
+  margin: 0;
+}
+
+.admin-count {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  margin: 10px 2px 16px;
+}
+
+/* ============================================================
+   TABLE
+   ============================================================ */
+.table-wrap {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.registry-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.registry-table thead th {
+  background: var(--maroon-950);
+  color: var(--gold-light);
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  padding: 13px 16px;
+}
+
+.registry-table .th-actions {
+  text-align: right;
+}
+
+.registry-table tbody tr {
+  border-top: 1px solid var(--line);
+}
+
+.registry-table tbody tr:hover {
+  background: #FDF8EE;
+}
+
+.registry-table td {
+  padding: 12px 16px;
+  vertical-align: top;
+  color: var(--ink);
+}
+
+.cell-id {
+  font-weight: 700;
+  color: var(--maroon-900);
+  white-space: nowrap;
+}
+
+.cell-title,
+.cell-authors {
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cell-authors {
+  color: var(--ink-soft);
+}
+
+.cell-actions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.no-match-row td {
+  text-align: center;
+  color: var(--ink-soft);
+  padding: 26px;
+}
+
+/* small "M" seal shown next to a Marga-published entry's ID */
+.mini-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-left: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--maroon-950);
+  font-size: 9px;
+  font-weight: 800;
+  transform: rotate(-8deg);
+  vertical-align: middle;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--ink-soft);
+  margin-left: 6px;
+}
+
+.icon-btn:hover {
+  border-color: var(--maroon-700);
+  color: var(--maroon-800);
+}
+
+.icon-btn-danger:hover {
+  border-color: var(--error);
+  color: var(--error);
+}
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+.empty-state {
+  text-align: center;
+  padding: 64px 24px;
+  background: var(--white);
+  border: 1.5px dashed var(--line);
+  border-radius: var(--radius-m);
+}
+
+.empty-state h2 {
+  font-family: var(--font-display);
+  color: var(--maroon-950);
+  margin: 0 0 10px;
+}
+
+.empty-state p {
+  color: var(--ink-soft);
+  max-width: 420px;
+  margin: 0 auto 22px;
+  line-height: 1.55;
+}
+
+.empty-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ============================================================
+   MODALS
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(42, 16, 19, .55);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 110;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .2s ease, visibility .2s;
+}
+
+.modal-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  background: var(--paper-bg);
+  border-radius: var(--radius-l);
+  padding: 30px;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: var(--shadow-pop);
+  position: relative;
+  max-height: 88vh;
+  overflow-y: auto;
+  transform: translateY(14px) scale(.98);
+  transition: transform .22s ease;
+}
+
+.modal-overlay.is-open .modal {
+  transform: translateY(0) scale(1);
+}
+
+.modal.modal-wide {
+  max-width: 640px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: var(--ink-soft);
+  line-height: 1;
+}
+
+.modal-close:hover {
+  background: var(--line);
+  color: var(--maroon-800);
+}
+
+.modal h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--maroon-950);
+  margin: 6px 0 4px;
+  font-weight: 700;
+}
+
+.modal-paper-summary {
+  margin-top: 16px;
+  padding: 14px 16px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+}
+
+.modal-paper-summary strong {
+  display: block;
+  font-size: 14.5px;
+  color: var(--maroon-900);
+  line-height: 1.4;
+}
+
+.modal-paper-summary span {
+  display: block;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.modal-actions .btn {
+  flex: 1;
+}
+
+.modal-actions .btn-primary {
+  flex: 1;
+  margin-top: 0;
+  width: auto;
+}
+
+/* ============================================================
+   ENTRY FORM GRID
+   ============================================================ */
+.entry-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 18px;
+  margin-top: 18px;
+}
+
+@media (max-width: 560px) {
+  .entry-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   AUDIT TRAIL
+   ============================================================ */
+.audit-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+.audit-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 55vh;
+  overflow-y: auto;
+}
+
+.audit-row {
+  display: flex;
+  gap: 12px;
+  padding: 12px 4px;
+  border-top: 1px solid var(--line);
+}
+
+.audit-row:first-child {
+  border-top: none;
+}
+
+.audit-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 5px;
+  flex: none;
+}
+
+.audit-dot-add-entry {
+  background: var(--status-published);
+}
+
+.audit-dot-edit-entry {
+  background: var(--status-report);
+}
+
+.audit-dot-delete-entry {
+  background: var(--error);
+}
+
+.audit-dot-download-json,
+.audit-dot-import-json {
+  background: var(--status-presentation);
+}
+
+.audit-dot-login,
+.audit-dot-logout {
+  background: var(--ink-soft);
+}
+
+.audit-dot-login-failed,
+.audit-dot-audit-cleared {
+  background: var(--error);
+}
+
+.audit-dot-user-created,
+.audit-dot-role-changed {
+  background: var(--status-report);
+}
+
+.audit-dot-password-reset,
+.audit-dot-password-changed {
+  background: var(--gold);
+}
+
+.audit-dot-user-removed {
+  background: var(--error);
+}
+
+.audit-row-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.audit-row-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13.5px;
+}
+
+.audit-row-top strong {
+  color: var(--ink);
+}
+
+.audit-time {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.audit-row-meta {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-top: 2px;
+  word-break: break-word;
+}
+
+.audit-empty {
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  padding: 20px 4px;
+}
+
+/* ============================================================
+   TOAST — the ink-stamp chip is the signature detail
+   ============================================================ */
+.toast-wrap {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 200;
+  max-width: 320px;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  padding: 12px 14px;
+  box-shadow: var(--shadow-card);
+  font-size: 13.5px;
+  transform: translateY(10px);
+  opacity: 0;
+  transition: transform .22s ease, opacity .22s ease;
+}
+
+.toast.is-visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.toast-success {
+  border-left: 3px solid var(--status-published);
+}
+
+.toast-error {
+  border-left: 3px solid var(--error);
+}
+
+.toast-msg {
+  color: var(--ink);
+}
+
+/* the stamp chip: an oval ink-stamp imprint, tilted, like a due-date
+   library stamp — this is the tool's one deliberate signature flourish */
+.toast-seal {
+  flex: none;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1.5px solid var(--maroon-800);
+  color: var(--maroon-800);
+  transform: rotate(-5deg);
+  white-space: nowrap;
+}
+
+.toast.is-visible .toast-seal {
+  animation: stampDown .32s ease-out;
+}
+
+@keyframes stampDown {
+  0% {
+    transform: rotate(-5deg) scale(1.6);
+    opacity: 0;
+  }
+
+  60% {
+    transform: rotate(-5deg) scale(.92);
+    opacity: 1;
+  }
+
+  100% {
+    transform: rotate(-5deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: .001ms !important;
+    transition-duration: .001ms !important;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 720px) {
+  .header-inner {
+    padding: 12px 16px;
+  }
+
+  .admin-main {
+    padding: 20px 16px 60px;
+  }
+
+  .session-user {
+    display: none;
+  }
+
+  .cell-title,
+  .cell-authors {
+    max-width: 140px;
+  }
+
+  .registry-table td,
+  .registry-table th {
+    padding: 10px 10px;
+  }
+}
+
+/* ============================================================
+   ACCOUNTS + CHANGE PASSWORD
+   ============================================================ */
+.account-form {
+  display: grid;
+  grid-template-columns: 1fr 170px;
+  gap: 14px 16px;
+  margin-top: 18px;
+}
+
+.account-form.single {
+  grid-template-columns: 1fr;
+}
+
+.account-form .field-full,
+.account-form .btn-primary,
+.account-form .modal-field-error {
+  grid-column: 1 / -1;
+}
+
+.account-form .btn-primary {
+  margin-top: 4px;
+}
+
+.pw-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.pw-row input {
+  flex: 1;
+  min-width: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.cred-box {
+  margin-top: 16px;
+  padding: 14px 16px;
+  background: var(--white);
+  border: 1.5px solid var(--gold);
+  border-radius: var(--radius-s);
+}
+
+.cred-box>strong {
+  display: block;
+  font-size: 14.5px;
+  color: var(--maroon-900);
+  margin-bottom: 8px;
+}
+
+.cred-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 4px 0;
+  font-size: 13.5px;
+}
+
+.cred-row span {
+  width: 78px;
+  flex: none;
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.cred-row code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 14px;
+  word-break: break-all;
+  user-select: all;
+}
+
+.cred-box .btn {
+  margin-top: 8px;
+}
+
+.account-list-title {
+  margin: 26px 0 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.accounts-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 34vh;
+  overflow-y: auto;
+}
+
+.account-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.account-row:first-child {
+  border-top: none;
+}
+
+.account-info {
+  flex: 1 1 180px;
+  min-width: 0;
+}
+
+.account-name {
+  font-weight: 600;
+  font-size: 14px;
+  word-break: break-word;
+}
+
+.account-meta {
+  display: block;
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  margin-top: 2px;
+}
+
+.account-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.role-chip {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  vertical-align: middle;
+}
+
+.role-chip-admin {
+  background: var(--maroon-800);
+  color: var(--cream);
+}
+
+.role-chip-user {
+  background: var(--gold-light);
+  color: var(--maroon-950);
+}
+
+.btn-danger-ghost:hover:not(:disabled) {
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.accounts-empty {
+  color: var(--ink-soft);
+  font-size: 13px;
+  padding: 10px 0;
+}
+
+@media (max-width: 560px) {
+  .account-form {
+    grid-template-columns: 1fr;
+  }
+}
