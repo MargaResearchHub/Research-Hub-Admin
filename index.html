@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paper Registry - Marga Research Hub</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- ============================================================
+     LOGIN SCREEN
+     ============================================================ -->
+  <div id="loginScreen" class="login-screen">
+    <div class="login-seal-watermark" aria-hidden="true"></div>
+    <div class="login-card">
+      <div class="login-eyebrow">Marga Research Hub</div>
+      <h1 class="login-title">Paper Registry</h1>
+      <p class="login-sub">Staff sign-in to manage the paper catalogue.</p>
+      <form id="loginForm" class="login-form" novalidate>
+        <div class="field">
+          <label for="loginUsername">Username</label>
+          <input type="text" id="loginUsername" autocomplete="username" autocapitalize="off" spellcheck="false"
+            required>
+        </div>
+        <div class="field">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" autocomplete="current-password" required>
+        </div>
+        <p id="loginError" class="login-error" role="alert" aria-live="polite"></p>
+        <button type="submit" class="btn btn-gold login-submit" id="loginSubmitBtn">Sign in</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================
+     DASHBOARD
+     ============================================================ -->
+  <div id="dashboard" class="dashboard" hidden>
+
+    <header class="site-header">
+      <div class="header-inner admin-header-inner">
+        <div class="logo">
+          <span class="logo-mark" aria-hidden="true"></span>
+          <div class="logo-text">
+            <span>Paper Registry</span>
+            <small>Marga Research Hub</small>
+          </div>
+        </div>
+        <div class="admin-header-right">
+          <span id="roleStamp" class="role-stamp"></span>
+          <span id="sessionUser" class="session-user"></span>
+          <button type="button" id="changePwBtn" class="btn btn-ghost btn-sm">Change password</button>
+          <button type="button" id="logoutBtn" class="btn btn-ghost btn-sm">Log out</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="admin-main">
+
+      <div class="admin-toolbar">
+        <button type="button" id="addEntryBtn" class="btn btn-gold">+ Add entry</button>
+        <button type="button" id="importBtn" class="btn btn-ghost">Import paper.json</button>
+        <input type="file" id="importFileInput" accept="application/json,.json" hidden>
+        <button type="button" id="exportBtn" class="btn btn-maroon">Export paper.json</button>
+        <button type="button" id="auditToggleBtn" class="btn btn-ghost" hidden>Audit trail</button>
+        <button type="button" id="accountsBtn" class="btn btn-ghost" hidden>Accounts</button>
+        <div class="admin-search field">
+          <input type="text" id="tableSearchInput" placeholder="Filter by title, author, ID…"
+            aria-label="Filter records">
+        </div>
+      </div>
+
+      <p class="admin-count" id="entryCount"></p>
+
+      <div id="tableWrap" class="table-wrap" hidden>
+        <table class="registry-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Authors</th>
+              <th>Year</th>
+              <th>Area</th>
+              <th class="th-actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+
+      <div id="emptyState" class="empty-state" hidden>
+        <h2>No records yet</h2>
+        <p>Import your existing paper.json to pick up where you left off, or add the first entry by hand.</p>
+        <div class="empty-actions">
+          <button type="button" class="btn btn-gold" id="emptyImportBtn">Import paper.json</button>
+          <button type="button" class="btn btn-ghost" id="emptyAddBtn">Add entry manually</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ============================================================
+     ENTRY MODAL (Add / Edit / View)
+     ============================================================ -->
+  <div id="entryModalOverlay" class="modal-overlay">
+    <div class="modal modal-wide" role="dialog" aria-modal="true" aria-labelledby="entryModalTitle">
+      <button type="button" class="modal-close" id="entryModalClose" aria-label="Close">&times;</button>
+      <h3 id="entryModalTitle">Add entry</h3>
+      <p id="entryReadonlyNote" class="field-hint" hidden>Viewing this record. Close and use Edit to make changes.</p>
+
+      <form id="entryForm" novalidate>
+        <div class="entry-grid">
+          <div class="field">
+            <label for="fld_id">ID</label>
+            <input type="text" id="fld_id" required>
+            <span class="modal-field-error" id="fld_id_err"></span>
+            <span class="field-hint">Assigned automatically.</span>
+          </div>
+          
+          <div class="field">
+            <label for="fld_year">Year</label>
+            <input type="text" id="fld_year" inputmode="numeric" placeholder="e.g. 2024" required>
+            <span class="modal-field-error" id="fld_year_err"></span>
+          </div>
+
+          <div class="field field-full">
+            <label for="fld_title">Title</label>
+            <input type="text" id="fld_title" required>
+            <span class="modal-field-error" id="fld_title_err"></span>
+          </div>
+
+          <div class="field field-full">
+            <label for="fld_authors">Authors</label>
+            <input type="text" id="fld_authors" placeholder="Full names, comma-separated" required>
+            <span class="modal-field-error" id="fld_authors_err"></span>
+          </div>
+
+          <div class="field">
+            <label for="fld_partner">Partner slug <span class="field-optional">(optional)</span></label>
+            <input type="text" id="fld_partner" placeholder="e.g. undp">
+          </div>
+          <div class="field">
+            <label for="fld_partnerName">Partner organization</label>
+            <input type="text" id="fld_partnerName" list="partnerNameList" required>
+            <span class="modal-field-error" id="fld_partnerName_err"></span>
+          </div>
+
+          <div class="field field-full field-checkbox-row">
+            <label class="checkbox-label">
+              <input type="checkbox" id="fld_isMarga">
+              <span>Published via Marga Institute</span>
+            </label>
+            <span class="field-hint">Suggested automatically when the partner name contains “Marga” - override
+              anytime.</span>
+          </div>
+
+          <div class="field">
+            <label for="fld_area">Area slug <span class="field-optional">(optional)</span></label>
+            <input type="text" id="fld_area" placeholder="e.g. language-rights">
+          </div>
+          <div class="field">
+            <label for="fld_areaName">Field of study</label>
+            <input type="text" id="fld_areaName" list="areaNameList" required>
+            <span class="modal-field-error" id="fld_areaName_err"></span>
+          </div>
+
+          <div class="field">
+            <label for="fld_areaIcon">Area icon <span class="field-optional">(optional)</span></label>
+            <input type="text" id="fld_areaIcon" list="areaIconList" placeholder="e.g. fa-language">
+          </div>
+          <div class="field">
+            <label for="fld_litType">Publication type</label>
+            <input type="text" id="fld_litType" list="litTypeList" required>
+            <span class="modal-field-error" id="fld_litType_err"></span>
+            <span class="field-hint">Use published / unpublished / presentation / report to match the site's styled
+              badges.</span>
+          </div>
+
+          <div class="field">
+            <label for="fld_citations">Citations <span class="field-optional">(optional)</span></label>
+            <input type="number" id="fld_citations" min="0" step="1" placeholder="0">
+          </div>
+          <div class="field">
+            <label for="fld_pdfUrl">PDF link <span class="field-optional">(optional)</span></label>
+            <input type="text" id="fld_pdfUrl" placeholder="https://…">
+          </div>
+
+          <div class="field field-full">
+            <label for="fld_abstract">Abstract <span class="field-optional">(optional)</span></label>
+            <textarea id="fld_abstract" rows="4"></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" id="entrySaveBtn">Save entry</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================
+     DELETE CONFIRM MODAL
+     ============================================================ -->
+  <div id="deleteModalOverlay" class="modal-overlay">
+    <div class="modal" role="dialog" aria-modal="true">
+      <button type="button" class="modal-close" id="deleteModalClose" aria-label="Close">&times;</button>
+      <h3>Remove this record?</h3>
+      <div class="modal-paper-summary" id="deleteSummary"></div>
+      <p class="field-hint">This can't be undone.</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="deleteCancelBtn">Cancel</button>
+        <button type="button" class="btn-primary btn-danger" id="deleteConfirmBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+     IMPORT CONFIRM MODAL
+     ============================================================ -->
+  <div id="importModalOverlay" class="modal-overlay">
+    <div class="modal" role="dialog" aria-modal="true">
+      <button type="button" class="modal-close" id="importModalClose" aria-label="Close">&times;</button>
+      <h3>Replace current records?</h3>
+      <p class="field-hint" id="importSummary"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="importCancelBtn">Cancel</button>
+        <button type="button" class="btn-primary" id="importConfirmBtn">Import</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+     AUDIT TRAIL PANEL
+     ============================================================ -->
+  <div id="auditOverlay" class="modal-overlay">
+    <div class="modal modal-wide audit-modal" role="dialog" aria-modal="true">
+      <button type="button" class="modal-close" id="auditModalClose" aria-label="Close">&times;</button>
+      <h3>Audit trail</h3>
+      <div class="audit-toolbar">
+        <button type="button" class="btn btn-ghost btn-sm" id="clearAuditBtn">Clear log</button>
+      </div>
+      <div id="auditList" class="audit-list"></div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+     ACCOUNTS PANEL (admins only) - create staff logins, reset passwords, change roles, remove
+     ============================================================ -->
+  <div id="accountsOverlay" class="modal-overlay">
+    <div class="modal modal-wide" role="dialog" aria-modal="true" aria-labelledby="accountsTitle">
+      <button type="button" class="modal-close" id="accountsModalClose" aria-label="Close">&times;</button>
+      <h3 id="accountsTitle">Accounts</h3>
+      <p class="field-hint">Create a login for each person and give them the username and password. They choose their own
+        password the first time they sign in.</p>
+
+      <div id="credBox" class="cred-box" hidden>
+        <strong id="credTitle">Account ready</strong>
+        <div class="cred-row"><span>Username</span><code id="credUser"></code></div>
+        <div class="cred-row"><span>Password</span><code id="credPass"></code></div>
+        <p class="field-hint">Copy this now and pass it on - the password isn't shown again.</p>
+        <button type="button" class="btn btn-ghost btn-sm" id="credCopyBtn">Copy both</button>
+      </div>
+
+      <form id="createUserForm" class="account-form" novalidate>
+        <div class="field">
+          <label for="newUsername">Username</label>
+          <input type="text" id="newUsername" autocomplete="off" autocapitalize="off" spellcheck="false"
+            placeholder="e.g. nimal.perera">
+        </div>
+        <div class="field">
+          <label for="newRole">Role</label>
+          <select id="newRole">
+            <option value="user">Staff</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="field field-full">
+          <label for="newPassword">Temporary password</label>
+          <div class="pw-row">
+            <input type="text" id="newPassword" autocomplete="off" spellcheck="false">
+            <button type="button" class="btn btn-ghost btn-sm" id="genPwBtn">Generate</button>
+          </div>
+        </div>
+        <span class="modal-field-error field-full" id="createUserError" role="alert"></span>
+        <button type="submit" class="btn-primary" id="createUserBtn">Create account</button>
+      </form>
+
+      <h4 class="account-list-title">Existing accounts</h4>
+      <div id="accountsList" class="accounts-list"></div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+     CHANGE PASSWORD (everyone; required on first sign-in with a password an admin gave you)
+     ============================================================ -->
+  <div id="passwordOverlay" class="modal-overlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="passwordTitle">
+      <button type="button" class="modal-close" id="passwordModalClose" aria-label="Close">&times;</button>
+      <h3 id="passwordTitle">Change password</h3>
+      <p id="passwordNote" class="field-hint"></p>
+      <form id="passwordForm" class="account-form single" novalidate>
+        <div class="field">
+          <label for="pwCurrent">Current password</label>
+          <input type="password" id="pwCurrent" autocomplete="current-password">
+        </div>
+        <div class="field">
+          <label for="pwNew">New password</label>
+          <input type="password" id="pwNew" autocomplete="new-password">
+          <span class="field-hint">At least 10 characters.</span>
+        </div>
+        <div class="field">
+          <label for="pwConfirm">Confirm new password</label>
+          <input type="password" id="pwConfirm" autocomplete="new-password">
+        </div>
+        <span class="modal-field-error" id="passwordError" role="alert"></span>
+        <button type="submit" class="btn-primary" id="passwordSubmitBtn">Update password</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================
+     TOAST - each success toast carries a small ink-stamp chip
+     ============================================================ -->
+  <div id="toastWrap" class="toast-wrap" aria-live="polite"></div>
+
+  <!-- Shared datalists -->
+  <datalist id="partnerNameList"></datalist>
+  <datalist id="areaNameList"></datalist>
+  <datalist id="areaIconList"></datalist>
+  <datalist id="litTypeList"></datalist>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
